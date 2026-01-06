@@ -1,7 +1,7 @@
 import os
 from os import environ
 
-TG_BOT_TOKEN = os.environ.get("BOT_TOKEN", "8599916340:AAFMrjig6vxfHHKt8m6VJBjr3y5bz046C2s")
+TG_BOT_TOKEN = os.environ.get("BOT_TOKEN", "8537306630:AAF5DNCLxchTuFiGXyer46yCz8PTRRhimX0")
 APP_ID = int(os.environ.get("APP_ID", "22460191"))
 API_HASH = os.environ.get("API_HASH", "c4be3756a8351d7f89f2195e921aea52")
 OWNER_ID = int(os.environ.get("OWNER_ID", "7984224708"))
