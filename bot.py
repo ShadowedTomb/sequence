@@ -9,10 +9,10 @@ from Plugins.route import web_server
 import pyrogram.utils
 from aiohttp import web
 
-pyrogram.utils.MIN_CHANNEL_ID = -1002449417637
+pyrogram.utils.MIN_CHANNEL_ID = -100999999999999
 
 name = """
-Files sequence bot started ✨ Credit:- @RexBots_Official
+Files sequence bot started .. ᴀʟʟ ᴛʜᴀɴᴋꜱ ᴛᴏ @ꜱʜᴀᴅᴏᴡᴇᴅᴛᴏᴍʙ
 """
 
 class Bot(Client):
@@ -55,20 +55,20 @@ class Bot(Client):
                 BotCommand("listchnl", "ʟɪsᴛ ꜰsᴜʙ ᴄʜᴀɴɴᴇʟs (ᴏɴʟʏ ᴀᴅᴍɪɴs)")
             ])
         except Exception as e:
-            print(f"Error setting bot commands: {e}")
+            print(f"Error occured while setting bot commands: {e}")
        
         # Notify bot restart
         try:
             await self.send_photo(
                 chat_id=DATABASE_CHANNEL,
-                photo="https://ibb.co/DH3N4Lyr",
+                photo="https://i.ibb.co/d49gvSpH/x.jpg",
                 caption="**I ʀᴇsᴛᴀʀᴛᴇᴅ ᴀɢᴀɪɴ !**",
                 reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇs", url="https://t.me/RexBots_Official")]]
+                    [[InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇs", url="https://t.me/shadowedtomb")]]
                 )
             )
         except Exception as e:
-            print(f"Error sending restart notification: {e}")
+            print(f"Error Occured while sending restart notification: {e}")
        
         self.username = usr_bot_me.username
        
