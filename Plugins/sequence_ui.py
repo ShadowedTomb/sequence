@@ -2,7 +2,11 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from Database.sequence_prefs import toggle
-from bot import app
+from pyrogram import Client, filters
+
+@Client.on_callback_query(filters.regex("^sequence_"))
+async def sequence_handler(client, callback_query):
+    await callback_query.answer("OK")
 
 def buttons():
     return InlineKeyboardMarkup([
