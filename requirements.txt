@@ -1,5 +1,5 @@
-pyrofork
-TgCrypto
-aiohttp
-motor
+pyrofork>=2.0.100
+tgcrypto
+aiohttp>=3.9
+motor>=3.3
 asyncio
