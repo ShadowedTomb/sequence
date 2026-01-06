@@ -659,7 +659,7 @@ async def send_msg(user_id, message):
 
 @Client.on_message(filters.command(["stats", "status"]) & filters.private & admin)
 async def get_stats(bot, message):
-    total_users = await Seishiro.total_users_count()
+    total_users = await namehuh.total_users_count()
     uptime = time.strftime("%Hh%Mm%Ss", time.gmtime(time.time() - bot.uptime))
     start_t = time.time()
     st = await message.reply('<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>')
