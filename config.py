@@ -5,6 +5,7 @@ TG_BOT_TOKEN = os.environ.get("BOT_TOKEN", "8599916340:AAFMrjig6vxfHHKt8m6VJBjr3
 APP_ID = int(os.environ.get("APP_ID", "22460191"))
 API_HASH = os.environ.get("API_HASH", "c4be3756a8351d7f89f2195e921aea52")
 OWNER_ID = int(os.environ.get("OWNER_ID", "7984224708"))
+MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://JeffyBackUp:JeffyBackUp@cluster0.hgbjdhr.mongodb.net/?retryWrites=true&w=majority")
 PORT = os.environ.get("PORT", "8080")
 DB_URL = os.environ.get("DB_URI", "-1003510304245")
 DB_NAME = os.environ.get("DB_NAME", "ShadowedTomb")
