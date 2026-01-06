@@ -9,7 +9,7 @@ from pyrogram.enums import ParseMode
 from datetime import datetime
 from config import *
 from Plugins.callbacks import *
-from Database.database import Seishiro
+from Database.database import namehuh
 from Plugins.start import *
 
 logger = logging.getLogger(__name__)
@@ -122,7 +122,7 @@ async def arrange_cmd(client: Client, message: Message):
 async def mode_cmd(client: Client, message: Message):
     try:
         user_id = message.from_user.id
-        current = await Seishiro.get_sequence_mode(user_id)
+        current = await namehuh.get_sequence_mode(user_id)
         
         kb = InlineKeyboardMarkup([
             [InlineKeyboardButton(f"Qᴜᴀʟɪᴛʏ{' ✅' if current == 'Quality' else ''}", callback_data="mode_Quality"),
@@ -158,7 +158,7 @@ async def end_cmd(client: Client, message: Message):
             return
         
         # FIXED: Added await to get_dump_channel
-        dump_channel = await Seishiro.get_dump_channel(user_id)
+        dump_channel = await namehuh.get_dump_channel(user_id)
         
         series, non_series = parse_and_sort_files(session['files'], session['mode'])
         total_files = len(series) + len(non_series)
@@ -311,7 +311,7 @@ async def end_cmd(client: Client, message: Message):
                 raise send_error
         
         # Update sequence count for the user
-        await Seishiro.col.update_one(
+        await namehuh.col.update_one(
             {"_id": int(user_id)}, 
             {
                 "$inc": {"sequence_count": sent_count}, 
@@ -416,7 +416,7 @@ async def add_dump_cmd(client: Client, message: Message):
             )
             return
             
-        await Seishiro.set_dump_channel(user_id, channel_id)
+        await namehuh.set_dump_channel(user_id, channel_id)
        
         await handle_floodwait(
             message.reply_text,
@@ -437,13 +437,13 @@ async def rem_dump_cmd(client: Client, message: Message):
         user_id = message.from_user.id
         
         # FIXED: Removed incorrect channel_id parameter
-        current = await Seishiro.get_dump_channel(user_id)
+        current = await namehuh.get_dump_channel(user_id)
         if not current:
             await handle_floodwait(message.reply_text, "Yᴏᴜ ʜᴀᴠᴇɴ'ᴛ sᴇᴛ ᴀɴʏ ᴅᴜᴍᴘ ᴄʜᴀɴɴᴇʟ ʏᴇᴛ.")
             return
 
         # FIXED: Added await to remove_dump_channel
-        await Seishiro.remove_dump_channel(user_id)
+        await namehuh.remove_dump_channel(user_id)
         await handle_floodwait(
             message.reply_text,
             f" Dᴜᴍᴘ ᴄʜᴀɴɴᴇʟ ʀᴇᴍᴏᴠᴇᴅ!\n"
@@ -462,7 +462,7 @@ async def dump_info_cmd(client: Client, message: Message):
     try:
         user_id = message.from_user.id
         # FIXED: Removed incorrect channel_id parameter
-        dump_channel = await Seishiro.get_dump_channel(user_id)
+        dump_channel = await namehuh.get_dump_channel(user_id)
         
         if not dump_channel:
             await handle_floodwait(
@@ -505,7 +505,7 @@ async def leaderboard_cmd(client: Client, message: Message):
         user_id = message.from_user.id
 
         # CORRECT Motor 3.0+ syntax
-        cursor = Seishiro.col.find(
+        cursor = namehuh.col.find(
             {"sequence_count": {"$exists": True, "$gt": 0}}
         ).sort("sequence_count", -1).limit(10)
 
@@ -541,12 +541,12 @@ async def leaderboard_cmd(client: Client, message: Message):
 
         # Show user's rank if not in top 10
         if current_user_rank is None:
-            user_doc = await Seishiro.col.find_one({"_id": user_id})
+            user_doc = await namehuh.col.find_one({"_id": user_id})
             user_count = user_doc.get("sequence_count", 0) if user_doc else 0
 
             if user_count > 0:
                 # Count users with higher score
-                rank = await Seishiro.col.count_documents({
+                rank = await namehuh.col.count_documents({
                     "sequence_count": {"$gt": user_count}
                 }) + 1
                 leaderboard_text += "୨⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯୧\n"
