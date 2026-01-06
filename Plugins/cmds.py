@@ -1,7 +1,7 @@
 from config import *
 from Plugins.callbacks import *
 from Plugins.start import *
-from Database.database import Seishiro
+from Database.database import namehuh
 from pyrogram.types import Message, ChatMemberUpdated, ChatJoinRequest, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid, FloodWait, InputUserDeactivated, UserIsBlocked, PeerIdInvalid
@@ -18,7 +18,7 @@ async def check_admin(filter, client, message):
         user_id = message.from_user.id
         if user_id == OWNER_ID:
             return True
-        return await Seishiro.is_admin(user_id)
+        return await namehuh.is_admin(user_id)
     except Exception as e:
         logger.error(f"Exception in check_admin: {e}")
         return False
@@ -32,7 +32,7 @@ admin = filters.create(check_admin)
 async def add_admins(client: Client, message: Message):
     try:
         pro = await message.reply("<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
-        admin_ids = await Seishiro.list_admins()
+        admin_ids = await namehuh.list_admins()
         admins = message.text.split()[1:]
 
         reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]])
@@ -63,7 +63,7 @@ async def add_admins(client: Client, message: Message):
 
             try:
                 user = await client.get_users(user_id)
-                await Seishiro.add_admin(user_id)
+                await namehuh.add_admin(user_id)
                 successfully_added.append(user_id)
                 admin_list += f"<b>• Nᴀᴍᴇ: {user.mention}\n⚡ Iᴅ: <code>{user_id}</code></b>\n\n"
             except Exception as e:
@@ -87,7 +87,7 @@ async def add_admins(client: Client, message: Message):
 async def delete_admins(client: Client, message: Message):
     try:
         pro = await message.reply("<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
-        admin_ids = await Seishiro.list_admins()
+        admin_ids = await namehuh.list_admins()
         admins = message.text.split()[1:]
 
         reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]])
@@ -107,7 +107,7 @@ async def delete_admins(client: Client, message: Message):
                         removed_list += f"<b>• Nᴀᴍᴇ: {user.mention}\n⚡ Iᴅ: <code>{id}</code></b>\n\n"
                     except:
                         removed_list += f"<b>• Iᴅ: <code>{id}</code></b>\n\n"
-                    await Seishiro.remove_admin(id)
+                    await namehuh.remove_admin(id)
                 return await pro.edit(
                     f"<b><u>✅ Rᴇᴍᴏᴠᴇᴅ ᴀʟʟ ᴀᴅᴍɪɴs:</u></b>\n\n{removed_list}",
                     reply_markup=reply_markup
@@ -133,7 +133,7 @@ async def delete_admins(client: Client, message: Message):
                         passed += f"<b>• Nᴀᴍᴇ: {user.mention}\n⚡ Iᴅ: <code>{id}</code></b>\n\n"
                     except:
                         passed += f"<b>• Iᴅ: <code>{id}</code></b>\n\n"
-                    await Seishiro.remove_admin(id)
+                    await namehuh.remove_admin(id)
                 else:
                     passed += f"<blockquote><b>⚠️ ID <code>{id}</code> ɴᴏᴛ ғᴏᴜɴᴅ ɪɴ ᴀᴅᴍɪɴ ʟɪsᴛ.</b></blockquote>\n"
 
@@ -154,7 +154,7 @@ async def delete_admins(client: Client, message: Message):
 async def get_admins(client: Client, message: Message):
     try:
         pro = await message.reply("<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
-        admin_ids = await Seishiro.list_admins()
+        admin_ids = await namehuh.list_admins()
 
         if not admin_ids:
             admin_list = "<b><blockquote>❌ Nᴏ ᴀᴅᴍɪɴs ғᴏᴜɴᴅ.</blockquote></b>"
@@ -204,7 +204,7 @@ async def ban_user(bot, message):
         except:
             user_mention = f"<code>{user_id}</code>"
             
-        await Seishiro.ban_data.update_one(
+        await namehuh.ban_data.update_one(
             {"_id": user_id},
             {"$set": {
                 "ban_status.is_banned": True,
@@ -255,7 +255,7 @@ async def unban_user(bot, message):
         except:
             user_mention = f"<code>{user_id}</code>"
             
-        await Seishiro.ban_data.update_one(
+        await namehuh.ban_data.update_one(
             {"_id": user_id},
             {"$set": {
                 "ban_status.is_banned": False,
@@ -293,7 +293,7 @@ async def unban_user(bot, message):
 async def banned_list(bot, message):
     try:
         msg = await message.reply("<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>")
-        cursor = Seishiro.ban_data.find({"ban_status.is_banned": True})
+        cursor = namehuh.ban_data.find({"ban_status.is_banned": True})
         lines = []
         count = 0
         
@@ -339,7 +339,7 @@ async def banned_list(bot, message):
 @Client.on_message(filters.command('fsub_mode') & filters.private & admin)
 async def change_force_sub_mode(client: Client, message: Message):
     temp = await message.reply("<b><i>ᴡᴀɪᴛ ᴀ sᴇᴄ..</i></b>", quote=True)
-    channels = await Seishiro.show_channels()
+    channels = await namehuh.show_channels()
 
     if not channels:
         return await temp.edit("<b>❌ No force-sub channels found.</b>")
@@ -348,7 +348,7 @@ async def change_force_sub_mode(client: Client, message: Message):
     for ch_id in channels:
         try:
             chat = await client.get_chat(ch_id)
-            mode = await Seishiro.get_channel_mode(ch_id)
+            mode = await namehuh.get_channel_mode(ch_id)
             status = "🟢" if mode == "on" else "🔴"
             title = f"{status} {chat.title}"
             buttons.append([InlineKeyboardButton(title, callback_data=f"rfs_ch_{ch_id}")])
@@ -368,7 +368,7 @@ async def change_force_sub_mode(client: Client, message: Message):
 async def handle_Chatmembers(client, chat_member_updated: ChatMemberUpdated):
     chat_id = chat_member_updated.chat.id
 
-    if await Seishiro.req_user_exist(chat_id, user_id):
+    if await namehuh.req_user_exist(chat_id, user_id):
         old_member = chat_member_updated.old_chat_member
 
         if not old_member:
@@ -377,8 +377,8 @@ async def handle_Chatmembers(client, chat_member_updated: ChatMemberUpdated):
         if old_member.status == ChatMemberStatus.MEMBER:
             user_id = old_member.user.id
 
-            if await Seishiro.req_user_exist(chat_id, user_id):
-                await Seishiro.del_req_user(chat_id, user_id)
+            if await namehuh.req_user_exist(chat_id, user_id):
+                await namehuh.del_req_user(chat_id, user_id)
 
 
 # This handler will capture any join request to the channel/group where the bot is an admin
@@ -387,11 +387,11 @@ async def handle_join_request(client, chat_join_request):
     chat_id = chat_join_request.chat.id
     user_id = chat_join_request.from_user.id
 
-    all_channels = await Seishiro.show_channels()
+    all_channels = await namehuh.show_channels()
 
     if chat_id in all_channels:
-        if not await Seishiro.req_user_exist(chat_id, user_id):
-            await Seishiro.req_user(chat_id, user_id)
+        if not await namehuh.req_user_exist(chat_id, user_id):
+            await namehuh.req_user(chat_id, user_id)
 
 @Client.on_message(filters.command('addchnl') & filters.private & admin)
 async def add_force_sub(client: Client, message: Message):
@@ -409,7 +409,7 @@ async def add_force_sub(client: Client, message: Message):
     except ValueError:
         return await temp.edit("<b>❌ Invalid Channel ID!</b>")
 
-    all_channels = await Seishiro.show_channels()
+    all_channels = await namehuh.show_channels()
     channel_ids_only = [cid if isinstance(cid, int) else cid[0] for cid in all_channels]
     if channel_id in channel_ids_only:
         try:
@@ -435,7 +435,7 @@ async def add_force_sub(client: Client, message: Message):
         except Exception:
             link = f"https://t.me/{chat.username}" if chat.username else f"https://t.me/c/{str(chat.id)[4:]}"
 
-        await Seishiro.add_fsub_channel(channel_id)
+        await namehuh.add_fsub_channel(channel_id)
         return await temp.edit(
             f"<b>✅ Force-sub channel added successfully!</b>\n\n"
             f"<b>Name:</b> <a href='{link}'>{chat.title}</a>\n"
@@ -453,7 +453,7 @@ async def add_force_sub(client: Client, message: Message):
 async def del_force_sub(client: Client, message: Message):
     temp = await message.reply("<b><i>ᴡᴀɪᴛ ᴀ sᴇᴄ..</i></b>", quote=True)
     args = message.text.split(maxsplit=1)
-    all_channels = await Seishiro.show_channels()
+    all_channels = await namehuh.show_channels()
 
     if len(args) != 2:
         return await temp.edit("<b>Usage:</b> <code>/delchnl &lt;channel_id | all&gt;</code>")
@@ -462,7 +462,7 @@ async def del_force_sub(client: Client, message: Message):
         if not all_channels:
             return await temp.edit("<b>❌ No force-sub channels found.</b>")
         for ch_id in all_channels:
-            await Seishiro.remove_fsub_channel(ch_id)
+            await namehuh.remove_fsub_channel(ch_id)
         return await temp.edit("<b>✅ All force-sub channels have been removed.</b>")
 
     try:
@@ -471,7 +471,7 @@ async def del_force_sub(client: Client, message: Message):
         return await temp.edit("<b>❌ Invalid Channel ID</b>")
 
     if ch_id in all_channels:
-        await Seishiro.remove_fsub_channel(ch_id)
+        await namehuh.remove_fsub_channel(ch_id)
         try:
             chat = await client.get_chat(ch_id)
             return await temp.edit(f"<b>✅ Channel removed:</b>\n<b>Name:</b> {chat.title}\n<b>ID:</b> <code>{ch_id}</code>")
@@ -488,7 +488,7 @@ async def del_force_sub(client: Client, message: Message):
 @Client.on_message(filters.command('listchnl') & filters.private & admin)
 async def list_force_sub_channels(client: Client, message: Message):
     temp = await message.reply("<b><i>ᴡᴀɪᴛ ᴀ sᴇᴄ..</i></b>", quote=True)
-    channels = await Seishiro.show_channels()
+    channels = await namehuh.show_channels()
 
     if not channels:
         return await temp.edit("<b>❌ No force-sub channels found.</b>")
@@ -516,7 +516,7 @@ async def broadcast_handler(client: Client, m: Message):
             )
         
         try:
-            all_users = await Seishiro.get_all_users()
+            all_users = await namehuh.get_all_users()
         except Exception as e:
             logger.error(f"Error fetching users from database: {e}")
             return await m.reply_text(
@@ -538,7 +538,7 @@ async def broadcast_handler(client: Client, m: Message):
         start_time = time.time()
         
         try:
-            total_users = await Seishiro.total_users_count()
+            total_users = await namehuh.total_users_count()
         except Exception as e:
             logger.error(f"Error getting total users count: {e}")
             total_users = 0
@@ -553,7 +553,7 @@ async def broadcast_handler(client: Client, m: Message):
                         failed += 1
                     if sts == 400:
                         try:
-                            await Seishiro.delete_user(user['_id'])
+                            await namehuh.delete_user(user['_id'])
                         except Exception as e:
                             logger.error(f"Error deleting user {user['_id']}: {e}")
                     done += 1
