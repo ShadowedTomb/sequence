@@ -2,7 +2,7 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, Message, InputMediaPhoto
 from pyrogram.enums import ParseMode
-from Database.database import Seishiro
+from Database.database import namehuh
 from config import *
 
 @Client.on_callback_query()
@@ -12,7 +12,7 @@ async def settings_callback(client: Client, callback_query):
 
     try:
         if cb_data == "mode_Quality":
-            await Seishiro.set_sequence_mode(user_id, "Quality")
+            await namehuh.set_sequence_mode(user_id, "Quality")
             mode = "Quality"
             await callback_query.answer("Sequence mode set to Quality.", show_alert=True)
             
@@ -36,7 +36,7 @@ async def settings_callback(client: Client, callback_query):
             )
 
         elif cb_data == "mode_Episode":
-            await Seishiro.set_sequence_mode(user_id, "Episode")
+            await namehuh.set_sequence_mode(user_id, "Episode")
             mode = "Episode"
             await callback_query.answer("Sequence mode set to Episode.", show_alert=True)
             
@@ -59,7 +59,7 @@ async def settings_callback(client: Client, callback_query):
             )
 
         elif cb_data == "mode_Season":
-            await Seishiro.set_sequence_mode(user_id, "Season")
+            await namehuh.set_sequence_mode(user_id, "Season")
             mode = "Season"
             await callback_query.answer("Sequence mode set to Season.", show_alert=True)
             
@@ -82,7 +82,7 @@ async def settings_callback(client: Client, callback_query):
             )
 
         elif cb_data == "mode_All":
-            await Seishiro.set_sequence_mode(user_id, "All")
+            await namehuh.set_sequence_mode(user_id, "All")
             mode = "All"
             await callback_query.answer("Sequence mode set to All (season, episode, quality).", show_alert=True)
             
@@ -172,7 +172,7 @@ async def settings_callback(client: Client, callback_query):
             cid = int(cb_data.split("_")[2])
             try:
                 chat = await client.get_chat(cid)
-                mode = await Seishiro.get_channel_mode(cid)
+                mode = await namehuh.get_channel_mode(cid)
                 status = "ON" if mode == "on" else "OFF"
                 new_mode = "off" if mode == "on" else "on"
                 buttons = [
@@ -193,7 +193,7 @@ async def settings_callback(client: Client, callback_query):
             action = parts[1]
             mode = "on" if action == "on" else "off"
 
-            await Seishiro.set_channel_mode(cid, mode)
+            await namehuh.set_channel_mode(cid, mode)
             await callback_query.answer(f"Force-Sub set to {'ON' if mode == 'on' else 'OFF'}")
 
             chat = await client.get_chat(cid)
@@ -210,12 +210,12 @@ async def settings_callback(client: Client, callback_query):
             )
 
         elif cb_data == "fsub_back":
-            channels = await Seishiro.show_channels()
+            channels = await namehuh.show_channels()
             buttons = []
             for cid in channels:
                 try:
                     chat = await client.get_chat(cid)
-                    mode = await Seishiro.get_channel_mode(cid)
+                    mode = await namehuh.get_channel_mode(cid)
                     status = "✅" if mode == "on" else "❌"
                     buttons.append([InlineKeyboardButton(f"{status} {chat.title}", callback_data=f"rfs_ch_{cid}")])
                 except Exception:
