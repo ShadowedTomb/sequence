@@ -253,4 +253,4 @@ class Master:
 
 
 # Initialize
-Seishiro = Master(DB_URL, DB_NAME)
+namehuh = Master(DB_URL, DB_NAME)
